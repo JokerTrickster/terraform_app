@@ -1,0 +1,4 @@
+logan.cho.pem
+.terraform/
+*.tfstate
+*.tfstate.backup
