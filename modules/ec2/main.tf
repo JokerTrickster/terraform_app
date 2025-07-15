@@ -91,45 +91,71 @@ resource "aws_instance" "runner" {
   # GitHub Actions Runner 설치 및 설정
   user_data = <<-EOF
               #!/bin/bash
+              set -eux
+
               # 시스템 업데이트
-              yum update -y
+              apt-get update -y
+              apt-get upgrade -y
 
-              # Docker 설치
-              yum install -y docker
-              systemctl start docker
+              # 필수 패키지
+              apt-get install -y \
+                ca-certificates \
+                curl \
+                gnupg \
+                lsb-release \
+                unzip \
+                software-properties-common
+
+              # Docker GPG 키 및 저장소 추가
+              install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+                gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              chmod a+r /etc/apt/keyrings/docker.gpg
+
+              echo \
+                "deb [arch=$(dpkg --print-architecture) \
+                signed-by=/etc/apt/keyrings/docker.gpg] \
+                https://download.docker.com/linux/ubuntu \
+                $(lsb_release -cs) stable" | \
+                tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+              apt-get update
+              apt-get install -y docker-ce docker-ce-cli containerd.io
+
+              # Docker 설정
               systemctl enable docker
+              systemctl start docker
+              usermod -aG docker ubuntu
 
-              # 현재 사용자를 docker 그룹에 추가
-              usermod -a -G docker ec2-user
-              
               # Docker Compose 설치
-              curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" \
+                -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
-              
-              # Docker 서비스 시작
-              systemctl start docker
-              systemctl enable docker
+              ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose || true
 
               # Node.js 설치 (빌드용)
-              curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
-              yum install -y nodejs
-              
-              # Java 설치 (빌드용)
-              yum install -y java-11-amazon-corretto
-              
-              # Python 3.9 설치
-              yum install -y python3 python3-pip
-              
+              curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+              apt-get install -y nodejs
+
+              # Java 설치 (Amazon Corretto JDK 11)
+              apt-get install -y wget
+              wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.deb
+              dpkg -i amazon-corretto-11-x64-linux-jdk.deb
+              rm amazon-corretto-11-x64-linux-jdk.deb
+
+              # Python 3 및 pip 설치
+              apt-get install -y python3 python3-pip
+
+              sudo apt-get install -y unzip
+
               # AWS CLI v2 설치
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
               unzip awscliv2.zip
-              ./aws/install
+              sudo ./aws/install
               rm -rf aws awscliv2.zip
-              
-              # AWS CLI 버전 확인
-              aws --version
-              
-              echo "GitHub Actions Runner installation completed!"
+
+              # 완료 로그
+              echo "✅ GitHub Actions Runner 및 빌드 환경 설치 완료"
               EOF
 }
 
