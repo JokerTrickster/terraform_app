@@ -1,6 +1,6 @@
 # Terraform AWS Infrastructure
 
-AWS에서 VPC, 퍼블릭 서브넷, EC2 인스턴스를 생성하는 Terraform 프로젝트입니다.
+AWS에서 VPC, 퍼블릭 서브넷, EC2 인스턴스, ECR 리포지토리를 생성하는 Terraform 프로젝트입니다.
 
 ## 프로젝트 구조
 
@@ -19,7 +19,15 @@ terraform_app/
 │   │   ├── main.tf
 │   │   ├── variables.tf
 │   │   └── outputs.tf
-│   └── ec2/           # EC2 인스턴스 모듈
+│   ├── ec2/           # EC2 인스턴스 모듈
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── ecr/           # ECR 리포지토리 모듈
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   └── iam/           # IAM 역할 및 정책 모듈
 │       ├── main.tf
 │       ├── variables.tf
 │       └── outputs.tf
@@ -46,6 +54,15 @@ terraform_app/
 - **t3.micro 인스턴스 타입**: 프리티어 사용
 - **Apache 웹 서버 자동 설치**: user_data 스크립트
 - **퍼블릭 IP 자동 할당**: 서브넷 설정으로 인해
+
+### ECR 모듈 (`modules/ecr/`)
+- **ECR 리포지토리 생성**: Docker 이미지 저장소
+- **리포지토리 이름**: `terraform-app-ecr`
+- **이미지 태그**: 태그 없이 빌드 시 자동 생성
+
+### IAM 모듈 (`modules/iam/`)
+- **IAM 역할 생성**: EC2, ECR에 대한 권한 부여
+- **IAM 정책 생성**: 필요한 권한 포함
 
 ## 사용 방법
 
