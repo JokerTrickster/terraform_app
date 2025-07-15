@@ -54,3 +54,19 @@ output "runner_public_dns" {
   description = "GitHub Actions Runner 공인 DNS"
   value       = module.ec2.runner_public_dns
 }
+
+# ECR 출력
+output "ecr_repository_url" {
+  description = "ECR 리포지토리 URL"
+  value       = module.ecr.repository_url
+}
+
+output "ecr_repository_name" {
+  description = "ECR 리포지토리 이름"
+  value       = module.ecr.repository_name
+}
+
+output "ecr_repository_arn" {
+  description = "ECR 리포지토리 ARN"
+  value       = module.ecr.repository_arn
+}

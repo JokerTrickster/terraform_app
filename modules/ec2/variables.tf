@@ -32,4 +32,9 @@ variable "environment" {
 variable "project_name" {
   description = "프로젝트 이름"
   type        = string
+}
+
+variable "iam_instance_profile_name" {
+  description = "IAM 인스턴스 프로파일 이름"
+  type        = string
 } 

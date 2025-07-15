@@ -72,6 +72,7 @@ resource "aws_instance" "runner" {
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
   subnet_id              = var.subnet_id
+  iam_instance_profile   = var.iam_instance_profile_name  # IAM 인스턴스 프로파일 추가
 
   # 빌드 배포용 최적화 설정
   root_block_device {
@@ -119,7 +120,16 @@ resource "aws_instance" "runner" {
               # Python 3.9 설치
               yum install -y python3 python3-pip
               
-                         
+              # AWS CLI v2 설치
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+              unzip awscliv2.zip
+              ./aws/install
+              rm -rf aws awscliv2.zip
+              
+              # AWS CLI 버전 확인
+              aws --version
+              
+              echo "GitHub Actions Runner installation completed!"
               EOF
 }
 

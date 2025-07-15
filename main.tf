@@ -8,6 +8,14 @@ module "vpc" {
   project_name         = var.project_name
 }
 
+# IAM 모듈
+module "iam" {
+  source = "./modules/iam"
+  
+  environment  = var.environment
+  project_name = var.project_name
+}
+
 # Security Group 모듈
 module "security" {
   source = "./modules/security"
@@ -21,11 +29,20 @@ module "security" {
 module "ec2" {
   source = "./modules/ec2"
   
-  vpc_id            = module.vpc.vpc_id
-  subnet_id         = module.vpc.subnet_ids[0]  # 첫 번째 서브넷 사용
-  security_group_id = module.security.security_group_id
-  instance_type     = var.instance_type
-  key_name          = var.key_name
-  environment       = var.environment
-  project_name      = var.project_name
+  vpc_id                    = module.vpc.vpc_id
+  subnet_id                 = module.vpc.subnet_ids[0]  # 첫 번째 서브넷 사용
+  security_group_id         = module.security.security_group_id
+  instance_type             = var.instance_type
+  key_name                  = var.key_name
+  environment               = var.environment
+  project_name              = var.project_name
+  iam_instance_profile_name = module.iam.ec2_instance_profile_name
+}
+
+# ECR 모듈
+module "ecr" {
+  source = "./modules/ecr"
+  
+  environment  = var.environment
+  project_name = var.project_name
 }
