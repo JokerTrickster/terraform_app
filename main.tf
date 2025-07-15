@@ -17,7 +17,7 @@ module "security" {
   project_name = var.project_name
 }
 
-# EC2 모듈
+# EC2 모듈 (기존 + GitHub Actions Runner)
 module "ec2" {
   source = "./modules/ec2"
   

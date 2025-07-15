@@ -16,7 +16,7 @@ variable "security_group_id" {
 variable "instance_type" {
   description = "EC2 인스턴스 타입"
   type        = string
-  default     = "t2.micro"
+  default     = "t2.medium"
 }
 
 variable "key_name" {
