@@ -21,24 +21,25 @@ resource "aws_instance" "main" {
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
   subnet_id              = var.subnet_id
+  iam_instance_profile   = var.iam_instance_profile_name  # IAM 인스턴스 프로파일 추가
 
   tags = {
     Name = "${var.project_name}-ec2"
   }
 
-  # 사용자 데이터 스크립트 - Docker 설치
+  # 사용자 데이터 스크립트 - Docker 설치 및 ECR 스크립트 추가
   user_data = <<-EOF
               #!/bin/bash
               # 시스템 업데이트
-              yum update -y
+              apt-get update
               
               # Docker 설치
-              yum install -y docker
+              apt-get install -y docker.io
               systemctl start docker
               systemctl enable docker
               
               # 현재 사용자를 docker 그룹에 추가
-              usermod -a -G docker ec2-user
+              usermod -a -G docker ubuntu
               
               # Docker Compose 설치
               curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -48,10 +49,66 @@ resource "aws_instance" "main" {
               systemctl start docker
               systemctl enable docker
               
-              # 간단한 테스트용 웹 서버 실행 (선택사항)
-              docker run -d -p 80:80 --name nginx-test nginx:alpine
+              # AWS CLI v2 설치
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+              unzip awscliv2.zip
+              ./aws/install
+              rm -rf aws awscliv2.zip
+              
+              # ECR 컨테이너 실행 스크립트 생성
+              cat > /home/ubuntu/server_start.sh << 'SCRIPT'
+              #!/bin/bash
+
+              # 변수 설정
+              AWS_REGION="ap-northeast-2"
+              REPOSITORY="298483610289.dkr.ecr.$AWS_REGION.amazonaws.com/dev_frog"
+              TAG="dev_latest"
+              CONTAINER_NAME="dev_frog_container"
+              PORT="8080"
+
+              echo "[1/4] ECR 로그인 중..."
+              aws ecr get-login-password --region $AWS_REGION | \
+                sudo docker login --username AWS \
+                --password-stdin 298483610289.dkr.ecr.$AWS_REGION.amazonaws.com
+
+              if [ $? -ne 0 ]; then
+                echo "❌ ECR 로그인 실패"
+                exit 1
+              fi
+
+              echo "[2/4] Docker 이미지 pull 중..."
+              sudo docker pull $REPOSITORY:$TAG
+
+              if [ $? -ne 0 ]; then
+                echo "❌ Docker 이미지 pull 실패"
+                exit 1
+              fi
+
+              echo "[3/4] 기존 컨테이너 정리..."
+              sudo docker rm -f $CONTAINER_NAME 2>/dev/null
+
+              echo "[4/4] 컨테이너 실행 중..."
+              sudo docker run -d \
+                --name $CONTAINER_NAME \
+                -p $PORT:$PORT \
+                $REPOSITORY:$TAG
+
+              if [ $? -eq 0 ]; then
+                echo "✅ 컨테이너 '$CONTAINER_NAME' 실행 완료!"
+              else
+                echo "❌ 컨테이너 실행 실패"
+              fi
+              SCRIPT
+              
+              # 스크립트 실행 권한 부여
+              chmod +x /home/ubuntu/server_start.sh
+              
+              # ubuntu 소유권 변경
+              chown ubuntu:ubuntu /home/ubuntu/server_start.sh
               
               echo "Docker installation completed!"
+              echo "ECR container script created at: /home/ubuntu/server_start.sh"
+              echo "To run the container: ./server_start.sh"
               EOF
 }
 
@@ -91,71 +148,87 @@ resource "aws_instance" "runner" {
   # GitHub Actions Runner 설치 및 설정
   user_data = <<-EOF
               #!/bin/bash
-              set -eux
-
               # 시스템 업데이트
-              apt-get update -y
-              apt-get upgrade -y
+              yum update -y
 
-              # 필수 패키지
-              apt-get install -y \
-                ca-certificates \
-                curl \
-                gnupg \
-                lsb-release \
-                unzip \
-                software-properties-common
-
-              # Docker GPG 키 및 저장소 추가
-              install -m 0755 -d /etc/apt/keyrings
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-                gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-              chmod a+r /etc/apt/keyrings/docker.gpg
-
-              echo \
-                "deb [arch=$(dpkg --print-architecture) \
-                signed-by=/etc/apt/keyrings/docker.gpg] \
-                https://download.docker.com/linux/ubuntu \
-                $(lsb_release -cs) stable" | \
-                tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-              apt-get update
-              apt-get install -y docker-ce docker-ce-cli containerd.io
-
-              # Docker 설정
-              systemctl enable docker
+              # Docker 설치
+              yum install -y docker
               systemctl start docker
-              usermod -aG docker ubuntu
+              systemctl enable docker
 
+              # 현재 사용자를 docker 그룹에 추가
+              usermod -a -G docker ec2-user
+              
               # Docker Compose 설치
-              curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" \
-                -o /usr/local/bin/docker-compose
+              curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
-              ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose || true
+              
+              # Docker 서비스 시작
+              systemctl start docker
+              systemctl enable docker
 
               # Node.js 설치 (빌드용)
-              curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-              apt-get install -y nodejs
-
-              # Java 설치 (Amazon Corretto JDK 11)
-              apt-get install -y wget
-              wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.deb
-              dpkg -i amazon-corretto-11-x64-linux-jdk.deb
-              rm amazon-corretto-11-x64-linux-jdk.deb
-
-              # Python 3 및 pip 설치
-              apt-get install -y python3 python3-pip
-
-              sudo apt-get install -y unzip
-
+              curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
+              yum install -y nodejs
+              
+              # Java 설치 (빌드용)
+              yum install -y java-11-amazon-corretto
+              
+              # Python 3.9 설치
+              yum install -y python3 python3-pip
+              
               # AWS CLI v2 설치
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
               unzip awscliv2.zip
-              sudo ./aws/install
+              ./aws/install
               rm -rf aws awscliv2.zip
-
-              # 완료 로그
-              echo "✅ GitHub Actions Runner 및 빌드 환경 설치 완료"
+              
+              # AWS CLI 버전 확인
+              aws --version
+              
+              # GitHub Actions Runner 설치
+              mkdir -p /opt/actions-runner
+              cd /opt/actions-runner
+              curl -o actions-runner-linux-x64-2.311.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz
+              tar xzf ./actions-runner-linux-x64-2.311.0.tar.gz
+              rm actions-runner-linux-x64-2.311.0.tar.gz
+              
+              # Runner 설정 (나중에 수동으로 완료)
+              # ./config.sh --url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN
+              
+              # 자동 시작 스크립트 생성
+              cat > /opt/start-runner.sh << 'SCRIPT'
+              #!/bin/bash
+              cd /opt/actions-runner
+              ./run.sh
+              SCRIPT
+              chmod +x /opt/start-runner.sh
+              
+              # 시스템 서비스로 등록
+              cat > /etc/systemd/system/github-runner.service << 'SERVICE'
+              [Unit]
+              Description=GitHub Actions Runner
+              After=network.target
+              
+              [Service]
+              Type=simple
+              User=root
+              WorkingDirectory=/opt/actions-runner
+              ExecStart=/opt/actions-runner/run.sh
+              Restart=always
+              RestartSec=10
+              
+              [Install]
+              WantedBy=multi-user.target
+              SERVICE
+              
+              systemctl daemon-reload
+              systemctl enable github-runner.service
+              
+              echo "GitHub Actions Runner installation completed!"
+              echo "Please configure the runner with:"
+              echo "cd /opt/actions-runner"
+              echo "./config.sh --url https://github.com/YOUR_ORG/YOUR_REPO --token YOUR_TOKEN"
               EOF
 }
 

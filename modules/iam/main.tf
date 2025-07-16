@@ -107,6 +107,15 @@ resource "aws_iam_policy" "ec2_full_access" {
           "ecr:ReplicateImage"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath"
+        ]
+        Resource = "*"
       }
     ]
   })
