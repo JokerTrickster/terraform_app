@@ -69,4 +69,8 @@ module "ssm" {
   dev_common_mysql_port    = var.dev_common_mysql_port
   dev_frog_mysql_db        = var.dev_frog_mysql_db
   frog_firebase_service_key = var.frog_firebase_service_key
+  dev_frog_rabbitmq_user   = var.dev_frog_rabbitmq_user
+  dev_frog_rabbitmq_password = var.dev_frog_rabbitmq_password
+  dev_frog_rabbitmq_host   = var.dev_frog_rabbitmq_host
+  dev_frog_rabbitmq_port   = var.dev_frog_rabbitmq_port
 }

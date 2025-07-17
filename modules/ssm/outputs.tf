@@ -82,3 +82,23 @@ output "frog_firebase_service_key_arn" {
   description = "Frog Firebase Service Key 파라미터 ARN"
   value       = aws_ssm_parameter.frog_firebase_service_key.arn
 } 
+
+output "dev_frog_rabbitmq_user_arn" {
+  description = "Dev Frog RabbitMQ User 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_rabbitmq_user.arn
+}
+
+output "dev_frog_rabbitmq_password_arn" {
+  description = "Dev Frog RabbitMQ Password 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_rabbitmq_password.arn
+}
+
+output "dev_frog_rabbitmq_port_arn" {
+  description = "Dev Frog RabbitMQ Port 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_rabbitmq_port.arn
+} 
+
+output "dev_frog_rabbitmq_host_arn" {
+  description = "Dev Frog RabbitMQ Host 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_rabbitmq_host.arn
+} 

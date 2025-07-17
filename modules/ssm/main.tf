@@ -221,3 +221,59 @@ resource "aws_ssm_parameter" "frog_firebase_service_key" {
     Project     = var.project_name
   }
 } 
+
+# DEV_FROG_RABBITMQ_USER 파라미터 생성
+resource "aws_ssm_parameter" "dev_frog_rabbitmq_user" {
+  name        = "dev_frog_rabbitmq_user"
+  description = "Dev Frog RabbitMQ User for ${var.project_name}"
+  type        = "SecureString"
+  value       = var.dev_frog_rabbitmq_user
+
+  tags = {
+    Name        = "dev-frog-rabbitmq-user"
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
+
+# DEV_FROG_RABBITMQ_PASSWORD 파라미터 생성
+resource "aws_ssm_parameter" "dev_frog_rabbitmq_password" {
+  name        = "dev_frog_rabbitmq_password"
+  description = "Dev Frog RabbitMQ Password for ${var.project_name}"
+  type        = "SecureString"
+  value       = var.dev_frog_rabbitmq_password
+
+  tags = {
+    Name        = "dev-frog-rabbitmq-password"
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
+
+# DEV_FROG_RABBITMQ_PORT 파라미터 생성
+resource "aws_ssm_parameter" "dev_frog_rabbitmq_port" {
+  name        = "dev_frog_rabbitmq_port"
+  description = "Dev Frog RabbitMQ Port for ${var.project_name}"
+  type        = "SecureString"
+  value       = var.dev_frog_rabbitmq_port
+
+  tags = {
+    Name        = "dev-frog-rabbitmq-port"
+    Environment = var.environment
+    Project     = var.project_name
+  }
+} 
+
+# DEV_FROG_RABBITMQ_HOST 파라미터 생성
+resource "aws_ssm_parameter" "dev_frog_rabbitmq_host" {
+  name        = "dev_frog_rabbitmq_host"
+  description = "Dev Frog RabbitMQ Host for ${var.project_name}"
+  type        = "SecureString"
+  value       = var.dev_frog_rabbitmq_host
+
+  tags = {
+    Name        = "dev-frog-rabbitmq-host"
+    Environment = var.environment
+    Project     = var.project_name
+  }
+} 
