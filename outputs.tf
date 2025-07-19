@@ -23,7 +23,7 @@ output "route_table_id" {
   value       = module.vpc.route_table_id
 }
 
-# 기존 EC2 출력
+# EC2 출력
 output "ec2_instance_id" {
   description = "EC2 인스턴스 ID"
   value       = module.ec2.instance_id
@@ -37,22 +37,6 @@ output "ec2_public_ip" {
 output "ec2_public_dns" {
   description = "EC2 인스턴스 공인 DNS"
   value       = module.ec2.public_dns
-}
-
-# GitHub Actions Runner 출력
-output "runner_instance_id" {
-  description = "GitHub Actions Runner EC2 인스턴스 ID"
-  value       = module.ec2.runner_instance_id
-}
-
-output "runner_public_ip" {
-  description = "GitHub Actions Runner 공인 IP"
-  value       = module.ec2.runner_public_ip
-}
-
-output "runner_public_dns" {
-  description = "GitHub Actions Runner 공인 DNS"
-  value       = module.ec2.runner_public_dns
 }
 
 # ECR 출력

@@ -13,36 +13,28 @@ data "aws_subnets" "default" {
   }
 }
 
-# 각 기본 서브넷에 가용영역별 이름 태그 추가
+# 각 서브넷에 가용영역별 이름 태그 추가
 resource "aws_default_subnet" "default_az_a" {
-  availability_zone = "ap-northeast-2a"
+  availability_zone = "ap-south-1a"
 
   tags = {
-    Name = "ap-northeast-2a"
+    Name = "ap-south-1a"
   }
 }
 
 resource "aws_default_subnet" "default_az_b" {
-  availability_zone = "ap-northeast-2b"
+  availability_zone = "ap-south-1b"
 
   tags = {
-    Name = "ap-northeast-2b"
+    Name = "ap-south-1b"
   }
 }
 
 resource "aws_default_subnet" "default_az_c" {
-  availability_zone = "ap-northeast-2c"
+  availability_zone = "ap-south-1c"
 
   tags = {
-    Name = "ap-northeast-2c"
-  }
-}
-
-resource "aws_default_subnet" "default_az_d" {
-  availability_zone = "ap-northeast-2d"
-
-  tags = {
-    Name = "ap-northeast-2d"
+    Name = "ap-south-1c"
   }
 }
 
@@ -70,5 +62,5 @@ data "aws_availability_zones" "available" {
 
 # 리전 설정
 provider "aws" {
-  region = "ap-northeast-2"
+  region = "ap-south-1"
 } 

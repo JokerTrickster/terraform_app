@@ -1,4 +1,4 @@
-# EC2 인스턴스용 IAM 역할 생성
+# IAM 역할 생성
 resource "aws_iam_role" "ec2_role" {
   name = "${var.project_name}-ec2-role"
 
@@ -16,15 +16,14 @@ resource "aws_iam_role" "ec2_role" {
   })
 
   tags = {
-    Name        = "${var.project_name}-ec2-role"
-    Environment = var.environment
+    Name = "${var.project_name}-ec2-role"
   }
 }
 
-# EC2 풀 권한 정책 생성
-resource "aws_iam_policy" "ec2_full_access" {
-  name        = "${var.project_name}-ec2-full-access"
-  description = "EC2 풀 권한 정책"
+# EC2 정책 생성
+resource "aws_iam_policy" "ec2_policy" {
+  name        = "${var.project_name}-ec2-policy"
+  description = "Policy for EC2 instances"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -32,85 +31,19 @@ resource "aws_iam_policy" "ec2_full_access" {
       {
         Effect = "Allow"
         Action = [
-          "ec2:*"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "elasticloadbalancing:*"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "cloudwatch:*"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "autoscaling:*"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "iam:CreateServiceLinkedRole"
-        ]
-        Resource = "*"
-        Condition = {
-          StringEquals = {
-            "iam:AWSServiceName" = [
-              "autoscaling.amazonaws.com",
-              "ec2scheduled.amazonaws.com",
-              "elasticloadbalancing.amazonaws.com",
-              "spot.amazonaws.com",
-              "spotfleet.amazonaws.com",
-              "transitgateway.amazonaws.com"
-            ]
-          }
-        }
-      },
-      {
-        Effect = "Allow"
-        Action = [
+          "ec2:*",
           "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
-          "ecr:PutImage",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
           "ecr:DescribeRepositories",
-          "ecr:CreateRepository",
-          "ecr:DeleteRepository",
           "ecr:ListImages",
           "ecr:DescribeImages",
           "ecr:BatchDeleteImage",
-          "ecr:SetRepositoryPolicy",
-          "ecr:DeleteRepositoryPolicy",
-          "ecr:GetRepositoryPolicy",
-          "ecr:GetLifecyclePolicy",
-          "ecr:PutLifecyclePolicy",
-          "ecr:DeleteLifecyclePolicy",
-          "ecr:GetLifecyclePolicyPreview",
-          "ecr:StartLifecyclePolicyPreview",
-          "ecr:TagResource",
-          "ecr:UntagResource",
-          "ecr:ListTagsForResource",
-          "ecr:ReplicateImage"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage",
           "ssm:GetParameter",
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
@@ -121,19 +54,19 @@ resource "aws_iam_policy" "ec2_full_access" {
   })
 }
 
-# IAM 역할에 정책 연결
-resource "aws_iam_role_policy_attachment" "ec2_full_access" {
+# 정책을 역할에 연결
+resource "aws_iam_role_policy_attachment" "ec2_policy_attachment" {
   role       = aws_iam_role.ec2_role.name
-  policy_arn = aws_iam_policy.ec2_full_access.arn
+  policy_arn = aws_iam_policy.ec2_policy.arn
 }
 
-# EC2 인스턴스 프로파일 생성
+# 인스턴스 프로필 생성
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.project_name}-ec2-profile"
   role = aws_iam_role.ec2_role.name
+}
 
-  tags = {
-    Name        = "${var.project_name}-ec2-profile"
-    Environment = var.environment
-  }
+# 리전 설정
+provider "aws" {
+  region = "ap-south-1"
 } 

@@ -220,7 +220,7 @@ resource "aws_ssm_parameter" "frog_firebase_service_key" {
     Environment = var.environment
     Project     = var.project_name
   }
-} 
+}
 
 # DEV_FROG_RABBITMQ_USER 파라미터 생성
 resource "aws_ssm_parameter" "dev_frog_rabbitmq_user" {
@@ -250,20 +250,6 @@ resource "aws_ssm_parameter" "dev_frog_rabbitmq_password" {
   }
 }
 
-# DEV_FROG_RABBITMQ_PORT 파라미터 생성
-resource "aws_ssm_parameter" "dev_frog_rabbitmq_port" {
-  name        = "dev_frog_rabbitmq_port"
-  description = "Dev Frog RabbitMQ Port for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.dev_frog_rabbitmq_port
-
-  tags = {
-    Name        = "dev-frog-rabbitmq-port"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-} 
-
 # DEV_FROG_RABBITMQ_HOST 파라미터 생성
 resource "aws_ssm_parameter" "dev_frog_rabbitmq_host" {
   name        = "dev_frog_rabbitmq_host"
@@ -273,6 +259,20 @@ resource "aws_ssm_parameter" "dev_frog_rabbitmq_host" {
 
   tags = {
     Name        = "dev-frog-rabbitmq-host"
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
+
+# DEV_FROG_RABBITMQ_PORT 파라미터 생성
+resource "aws_ssm_parameter" "dev_frog_rabbitmq_port" {
+  name        = "dev_frog_rabbitmq_port"
+  description = "Dev Frog RabbitMQ Port for ${var.project_name}"
+  type        = "SecureString"
+  value       = var.dev_frog_rabbitmq_port
+
+  tags = {
+    Name        = "dev-frog-rabbitmq-port"
     Environment = var.environment
     Project     = var.project_name
   }

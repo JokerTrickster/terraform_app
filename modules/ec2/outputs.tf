@@ -16,25 +16,4 @@ output "public_dns" {
 output "private_ip" {
   description = "EC2 인스턴스 사설 IP"
   value       = aws_instance.main.private_ip
-}
-
-# GitHub Actions Runner 출력
-output "runner_instance_id" {
-  description = "GitHub Actions Runner EC2 인스턴스 ID"
-  value       = aws_instance.runner.id
-}
-
-output "runner_public_ip" {
-  description = "GitHub Actions Runner 공인 IP"
-  value       = aws_eip.runner.public_ip
-}
-
-output "runner_public_dns" {
-  description = "GitHub Actions Runner 공인 DNS"
-  value       = aws_eip.runner.public_dns
-}
-
-output "runner_private_ip" {
-  description = "GitHub Actions Runner 사설 IP"
-  value       = aws_instance.runner.private_ip
 } 

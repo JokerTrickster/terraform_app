@@ -48,4 +48,9 @@ resource "aws_ecr_lifecycle_policy" "main" {
       }
     ]
   })
+}
+
+# 리전 설정
+provider "aws" {
+  region = "ap-south-1"
 } 

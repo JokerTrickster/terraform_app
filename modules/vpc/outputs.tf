@@ -13,8 +13,7 @@ output "subnet_ids" {
   value       = [
     aws_default_subnet.default_az_a.id,
     aws_default_subnet.default_az_b.id,
-    aws_default_subnet.default_az_c.id,
-    aws_default_subnet.default_az_d.id
+    aws_default_subnet.default_az_c.id
   ]
 }
 
