@@ -7,6 +7,13 @@ resource "aws_instance" "main" {
   subnet_id              = var.subnet_id
   iam_instance_profile   = var.iam_instance_profile_name  # IAM 인스턴스 프로파일 추가
 
+  # 루트 볼륨 설정
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+    encrypted   = true
+  }
+
   tags = {
     Name = "${var.project_name}-ec2"
   }

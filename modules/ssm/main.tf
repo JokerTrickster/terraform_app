@@ -1,72 +1,3 @@
-# GOOGLE_CLIENT_ID 파라미터 생성
-resource "aws_ssm_parameter" "google_client_id" {
-  name        = "google_client_id"
-  description = "Google OAuth Client ID for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.google_client_id
-
-  tags = {
-    Name        = "google-client-id"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
-# GOOGLE_CLIENT_SECRET 파라미터 생성
-resource "aws_ssm_parameter" "google_client_secret" {
-  name        = "google_client_secret"
-  description = "Google OAuth Client Secret for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.google_client_secret
-
-  tags = {
-    Name        = "google-client-secret"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
-# APP_GOOGLE_CLIENT_ID 파라미터 생성
-resource "aws_ssm_parameter" "app_google_client_id" {
-  name        = "app_google_client_id"
-  description = "App Google OAuth Client ID for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.app_google_client_id
-
-  tags = {
-    Name        = "app-google-client-id"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
-# APP_GOOGLE_CLIENT_SECRET 파라미터 생성
-resource "aws_ssm_parameter" "app_google_client_secret" {
-  name        = "app_google_client_secret"
-  description = "App Google OAuth Client Secret for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.app_google_client_secret
-
-  tags = {
-    Name        = "app-google-client-secret"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
-# FROG_AES_KEY 파라미터 생성
-resource "aws_ssm_parameter" "frog_aes_key" {
-  name        = "frog_aes_key"
-  description = "Frog AES Key for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.frog_aes_key
-
-  tags = {
-    Name        = "frog-aes-key"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
 
 # DEV_FROG_REDIS_USER 파라미터 생성
 resource "aws_ssm_parameter" "dev_frog_redis_user" {
@@ -77,20 +8,6 @@ resource "aws_ssm_parameter" "dev_frog_redis_user" {
 
   tags = {
     Name        = "dev-frog-redis-user"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
-# DEV_FROG_REDIS_PASSWORD 파라미터 생성
-resource "aws_ssm_parameter" "dev_frog_redis_password" {
-  name        = "dev_frog_redis_password"
-  description = "Dev Frog Redis Password for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.dev_frog_redis_password
-
-  tags = {
-    Name        = "dev-frog-redis-password"
     Environment = var.environment
     Project     = var.project_name
   }
@@ -152,20 +69,6 @@ resource "aws_ssm_parameter" "dev_frog_mysql_user" {
   }
 }
 
-# DEV_COMMON_MYSQL_PASSWORD 파라미터 생성
-resource "aws_ssm_parameter" "dev_common_mysql_password" {
-  name        = "dev_common_mysql_password"
-  description = "Dev Common MySQL Password for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.dev_common_mysql_password
-
-  tags = {
-    Name        = "dev-common-mysql-password"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
 # DEV_COMMON_MYSQL_HOST 파라미터 생성
 resource "aws_ssm_parameter" "dev_common_mysql_host" {
   name        = "dev_common_mysql_host"
@@ -208,20 +111,6 @@ resource "aws_ssm_parameter" "dev_frog_mysql_db" {
   }
 }
 
-# FROG_FIREBASE_SERVICE_KEY 파라미터 생성
-resource "aws_ssm_parameter" "frog_firebase_service_key" {
-  name        = "frog_firebase_service_key"
-  description = "Frog Firebase Service Key for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.frog_firebase_service_key
-
-  tags = {
-    Name        = "frog-firebase-service-key"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
 # DEV_FROG_RABBITMQ_USER 파라미터 생성
 resource "aws_ssm_parameter" "dev_frog_rabbitmq_user" {
   name        = "dev_frog_rabbitmq_user"
@@ -231,20 +120,6 @@ resource "aws_ssm_parameter" "dev_frog_rabbitmq_user" {
 
   tags = {
     Name        = "dev-frog-rabbitmq-user"
-    Environment = var.environment
-    Project     = var.project_name
-  }
-}
-
-# DEV_FROG_RABBITMQ_PASSWORD 파라미터 생성
-resource "aws_ssm_parameter" "dev_frog_rabbitmq_password" {
-  name        = "dev_frog_rabbitmq_password"
-  description = "Dev Frog RabbitMQ Password for ${var.project_name}"
-  type        = "SecureString"
-  value       = var.dev_frog_rabbitmq_password
-
-  tags = {
-    Name        = "dev-frog-rabbitmq-password"
     Environment = var.environment
     Project     = var.project_name
   }

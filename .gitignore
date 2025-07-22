@@ -2,3 +2,4 @@ logan.cho.pem
 .terraform/
 *.tfstate
 *.tfstate.backup
+smm_tmp.tf_tmp

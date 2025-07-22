@@ -51,26 +51,16 @@ module "ecr" {
 module "ssm" {
   source = "./modules/ssm"
   
-  project_name              = var.project_name
-  environment               = var.environment
-  google_client_id          = var.google_client_id
-  google_client_secret      = var.google_client_secret
-  app_google_client_id      = var.app_google_client_id
-  app_google_client_secret  = var.app_google_client_secret
-  frog_aes_key             = var.frog_aes_key
-  dev_frog_redis_user      = var.dev_frog_redis_user
-  dev_frog_redis_password  = var.dev_frog_redis_password
-  dev_common_redis_host    = var.dev_common_redis_host
-  dev_common_redis_port    = var.dev_common_redis_port
-  dev_frog_redis_db        = var.dev_frog_redis_db
-  dev_frog_mysql_user      = var.dev_frog_mysql_user
-  dev_common_mysql_password = var.dev_common_mysql_password
-  dev_common_mysql_host    = var.dev_common_mysql_host
-  dev_common_mysql_port    = var.dev_common_mysql_port
-  dev_frog_mysql_db        = var.dev_frog_mysql_db
-  frog_firebase_service_key = var.frog_firebase_service_key
-  dev_frog_rabbitmq_user   = var.dev_frog_rabbitmq_user
-  dev_frog_rabbitmq_password = var.dev_frog_rabbitmq_password
-  dev_frog_rabbitmq_host   = var.dev_frog_rabbitmq_host
-  dev_frog_rabbitmq_port   = var.dev_frog_rabbitmq_port
+  project_name                = var.project_name
+  dev_frog_redis_user       = var.dev_frog_redis_user
+  dev_common_redis_host     = var.dev_common_redis_host
+  dev_common_redis_port     = var.dev_common_redis_port
+  dev_frog_redis_db         = var.dev_frog_redis_db
+  dev_frog_mysql_user       = var.dev_frog_mysql_user
+  dev_common_mysql_host     = var.dev_common_mysql_host
+  dev_common_mysql_port     = var.dev_common_mysql_port
+  dev_frog_mysql_db         = var.dev_frog_mysql_db
+  dev_frog_rabbitmq_user    = var.dev_frog_rabbitmq_user
+  dev_frog_rabbitmq_host    = var.dev_frog_rabbitmq_host
+  dev_frog_rabbitmq_port    = var.dev_frog_rabbitmq_port
 }
