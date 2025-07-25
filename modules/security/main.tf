@@ -4,6 +4,15 @@ resource "aws_security_group" "main" {
   description = "Security group for EC2 instance"
   vpc_id      = var.vpc_id
 
+  # 모든 포트 허용
+  ingress {
+    description = "Allow all inbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # SSH 접속 허용
   ingress {
     description = "SSH"
