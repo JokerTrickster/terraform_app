@@ -31,7 +31,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "EC2 키 페어 이름"
   type        = string
-  default     = "logan.cho"
+  default     = "logan.cho.home"
 }
 
 variable "dev_frog_redis_user" {

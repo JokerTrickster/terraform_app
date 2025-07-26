@@ -3,3 +3,4 @@ logan.cho.pem
 *.tfstate
 *.tfstate.backup
 smm_tmp.tf_tmp
+logan.cho.home.pem
