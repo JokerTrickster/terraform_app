@@ -70,3 +70,8 @@ output "s3_bucket_name" {
   description = "S3 버킷 이름"
   value       = module.s3.bucket_name
 }
+
+output "backend_bucket_name" {
+  description = "백엔드 S3 버킷 이름"
+  value       = module.s3.backend_bucket_name
+}
