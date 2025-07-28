@@ -64,3 +64,12 @@ module "ssm" {
   dev_frog_rabbitmq_host    = var.dev_frog_rabbitmq_host
   dev_frog_rabbitmq_port    = var.dev_frog_rabbitmq_port
 }
+
+# S3 모듈
+module "s3" {
+  source = "./modules/s3"
+
+  bucket_name   = "dev-frog"
+  environment   = var.environment
+  project_name  = var.project_name
+}

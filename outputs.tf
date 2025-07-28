@@ -54,3 +54,19 @@ output "ecr_repository_arn" {
   description = "ECR 리포지토리 ARN"
   value       = module.ecr.repository_arn
 }
+
+# S3 출력
+output "s3_bucket_id" {
+  description = "S3 버킷 ID"
+  value       = module.s3.bucket_id
+}
+
+output "s3_bucket_arn" {
+  description = "S3 버킷 ARN"
+  value       = module.s3.bucket_arn
+}
+
+output "s3_bucket_name" {
+  description = "S3 버킷 이름"
+  value       = module.s3.bucket_name
+}
