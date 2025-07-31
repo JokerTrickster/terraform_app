@@ -10,10 +10,10 @@ resource "aws_s3_bucket" "main" {
 
 # 백엔드용 S3 버킷 생성
 resource "aws_s3_bucket" "backend" {
-  bucket = "${var.project_name}-terraform-backend-${var.environment}"
+  bucket = "board-game-app-terraform-backend-${var.environment}"
 
   tags = {
-    Name = "${var.project_name}-terraform-backend-${var.environment}"
+    Name = "board-game-app-terraform-backend-${var.environment}"
     Environment = var.environment
     Purpose = "Terraform Backend"
   }

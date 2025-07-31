@@ -4,20 +4,15 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
   }
 
-  # S3 백엔드 설정
-  backend "s3" {
-    bucket = "terraform-app-terraform-backend-dev"
-    key    = "terraform.tfstate"
-    region = "ap-northeast-2"
-    
-    # DynamoDB를 사용한 상태 잠금 (선택사항)
-    # dynamodb_table = "terraform-locks"
-    # encrypt = true
-  }
+   backend "s3" {
+     bucket = "board-game-app-terraform-backend-dev"
+     key    = "terraform.tfstate"
+     region = "ap-south-1"
+   }
 }
 
 provider "aws" {

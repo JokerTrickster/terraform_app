@@ -69,7 +69,7 @@ module "ssm" {
 module "s3" {
   source = "./modules/s3"
 
-  bucket_name   = "dev-frog"
+  bucket_name   = "board-game-app"
   environment   = var.environment
   project_name  = var.project_name
 }
