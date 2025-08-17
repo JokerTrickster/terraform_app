@@ -49,6 +49,15 @@ resource "aws_iam_policy" "ec2_policy" {
           "ssm:GetParametersByPath"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:*"
+        ]
+        Resource = [
+          "arn:aws:s3:::board-game-app/*"
+        ]
       }
     ]
   })
