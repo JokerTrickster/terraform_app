@@ -75,3 +75,24 @@ output "backend_bucket_name" {
   description = "백엔드 S3 버킷 이름"
   value       = module.s3.backend_bucket_name
 }
+
+# Workflow Hosting 출력
+output "workflow_cloudfront_url" {
+  description = "Workflow CloudFront URL"
+  value       = module.workflow_hosting.cloudfront_url
+}
+
+output "workflow_cloudfront_distribution_id" {
+  description = "Workflow CloudFront Distribution ID"
+  value       = module.workflow_hosting.cloudfront_distribution_id
+}
+
+output "workflow_s3_bucket_name" {
+  description = "Workflow S3 Bucket Name"
+  value       = module.workflow_hosting.s3_bucket_name
+}
+
+output "workflow_iam_user_name" {
+  description = "Workflow IAM User for GitHub Actions"
+  value       = module.workflow_hosting.iam_user_name
+}

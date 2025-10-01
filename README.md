@@ -664,6 +664,166 @@ Contributions are welcome! Please follow these guidelines:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## 🌐 Workflow Web Hosting (NEW)
+
+### Overview
+Static website hosting for React applications using S3 + CloudFront with automated deployment support.
+
+**Module**: `modules/workflow-hosting/`
+
+### Quick Start
+
+1. **Apply Infrastructure**:
+   ```bash
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+
+2. **Get Deployment Credentials**:
+   ```bash
+   # Get outputs
+   terraform output workflow_cloudfront_url
+   terraform output workflow_cloudfront_distribution_id
+   terraform output workflow_s3_bucket_name
+   terraform output workflow_iam_user_name
+
+   # Create IAM access keys
+   aws iam create-access-key --user-name $(terraform output -raw workflow_iam_user_name)
+   ```
+
+3. **Deploy React Application**:
+   ```bash
+   # Build React app
+   npm run build
+
+   # Upload to S3
+   aws s3 sync build/ s3://jokertrickster-workflow/ --delete
+
+   # Invalidate CloudFront cache
+   aws cloudfront create-invalidation \
+     --distribution-id $(terraform output -raw workflow_cloudfront_distribution_id) \
+     --paths "/*"
+   ```
+
+### Features
+- ✅ S3 static website hosting
+- ✅ CloudFront CDN with HTTPS
+- ✅ SPA routing support (404 → index.html)
+- ✅ IAM user for GitHub Actions deployment
+- ✅ Cache invalidation support
+- ✅ Cost-optimized (within AWS Free Tier)
+
+### Outputs
+
+| Output | Description |
+|--------|-------------|
+| `workflow_cloudfront_url` | CloudFront distribution URL |
+| `workflow_cloudfront_distribution_id` | Distribution ID for cache invalidation |
+| `workflow_s3_bucket_name` | S3 bucket name (jokertrickster-workflow) |
+| `workflow_iam_user_name` | IAM user for deployment automation |
+
+### Configuration
+
+Default configuration in `main.tf`:
+```hcl
+module "workflow_hosting" {
+  source = "./modules/workflow-hosting"
+
+  bucket_name  = "jokertrickster-workflow"
+  environment  = "prod"
+  project_name = "workflow"
+}
+```
+
+### GitHub Actions Deployment
+
+Store these values in GitHub Secrets:
+- `AWS_ACCESS_KEY_ID` - IAM user access key
+- `AWS_SECRET_ACCESS_KEY` - IAM user secret key
+- `CLOUDFRONT_DISTRIBUTION_ID` - From Terraform output
+
+Example workflow (in separate workflow repository):
+```yaml
+name: Deploy to S3 + CloudFront
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
+        run: |
+          aws s3 sync build/ s3://jokertrickster-workflow/ --delete
+
+      - name: Invalidate CloudFront Cache
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-south-1
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+```
+
+### Troubleshooting
+
+**Issue**: Bucket name already exists
+- **Solution**: Update `bucket_name` in `main.tf` to a unique value (e.g., `jokertrickster-workflow-prod`)
+
+**Issue**: 404 errors on SPA routes
+- **Solution**: CloudFront custom error responses are configured (404/403 → 200). Wait for distribution propagation (5-15 minutes)
+
+**Issue**: Stale content after deployment
+- **Solution**: Run CloudFront cache invalidation after S3 sync
+
+**Issue**: IAM permission denied
+- **Solution**: Verify IAM policy is attached: `aws iam list-attached-user-policies --user-name workflow-github-actions-deploy`
+
+### Testing Guide
+
+Comprehensive testing procedures: See `TESTING_WORKFLOW_HOSTING.md`
+
+Quick test:
+```bash
+# Deploy test file
+echo "<html><body><h1>Test</h1></body></html>" > /tmp/test.html
+aws s3 cp /tmp/test.html s3://jokertrickster-workflow/index.html
+
+# Open in browser
+open $(terraform output -raw workflow_cloudfront_url)
+```
+
+### Cost Estimate
+**$0/month** (within AWS Free Tier for personal use)
+- S3: First 5GB free
+- CloudFront: First 1TB data transfer free
+- Invalidations: First 1,000 paths/month free
+
+### Documentation
+- **Module README**: `modules/workflow-hosting/README.md`
+- **Testing Guide**: `TESTING_WORKFLOW_HOSTING.md`
+
+---
+
 ## ⚠️ Important Notes
 
 1. **Region**: ap-south-1 (Mumbai) - change in `providers.tf` if needed
@@ -672,6 +832,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 4. **Costs**: Monitor AWS billing dashboard regularly
 5. **Security**: Tighten security group rules for production
 6. **State File**: Never manually edit `terraform.tfstate`
+7. **Workflow Hosting**: New module for React app hosting - does not affect existing infrastructure
 
 ## 📞 Support
 

@@ -73,3 +73,12 @@ module "s3" {
   environment   = var.environment
   project_name  = var.project_name
 }
+
+# Workflow Hosting 모듈 (S3 + CloudFront)
+module "workflow_hosting" {
+  source = "./modules/workflow-hosting"
+
+  bucket_name  = "jokertrickster-workflow"
+  environment  = "prod"
+  project_name = "workflow"
+}
