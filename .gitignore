@@ -4,3 +4,6 @@ logan.cho.pem
 *.tfstate.backup
 smm_tmp.tf_tmp
 logan.cho.home.pem
+# CCPM (Claude Code PM) 관련
+.claude/epics/
+.claude/settings.local.json
