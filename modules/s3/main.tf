@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "main" {
   bucket = var.bucket_name
 
   tags = {
-    Name = var.bucket_name
+    Name        = var.bucket_name
     Environment = var.environment
   }
 }
@@ -13,9 +13,9 @@ resource "aws_s3_bucket" "backend" {
   bucket = "board-game-app-terraform-backend-${var.environment}"
 
   tags = {
-    Name = "board-game-app-terraform-backend-${var.environment}"
+    Name        = "board-game-app-terraform-backend-${var.environment}"
     Environment = var.environment
-    Purpose = "Terraform Backend"
+    Purpose     = "Terraform Backend"
   }
 }
 
@@ -92,5 +92,5 @@ resource "aws_s3_object" "folders" {
 
   bucket = aws_s3_bucket.main.id
   key    = each.value
-  source = "/dev/null"  # 빈 파일로 폴더 생성
+  source = "/dev/null" # 빈 파일로 폴더 생성
 } 

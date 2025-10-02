@@ -13,7 +13,7 @@ resource "aws_iam_user" "github_actions_deploy" {
 # IAM Policy for GitHub Actions
 resource "aws_iam_policy" "github_actions_deploy" {
   name        = "${var.project_name}-github-actions-deploy-policy"
-  description = "Policy for GitHub Actions to deploy to S3 and invalidate CloudFront"
+  description = "Policy for GitHub Actions to deploy to S3"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -36,16 +36,6 @@ resource "aws_iam_policy" "github_actions_deploy" {
           "s3:DeleteObject"
         ]
         Resource = "${aws_s3_bucket.workflow_hosting.arn}/*"
-      },
-      {
-        Sid    = "CloudFrontInvalidation"
-        Effect = "Allow"
-        Action = [
-          "cloudfront:CreateInvalidation",
-          "cloudfront:GetInvalidation",
-          "cloudfront:ListInvalidations"
-        ]
-        Resource = aws_cloudfront_distribution.workflow_hosting.arn
       }
     ]
   })

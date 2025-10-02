@@ -1,11 +1,11 @@
 # 기존 EC2 인스턴스 생성 (t4g.medium)
 resource "aws_instance" "main" {
-  ami                    = "ami-02f607855bfce66b6"  # Amazon Linux 2023 AMI for ap-south-1
-  instance_type          = "t4g.medium"             # ARM64 기반 인스턴스
+  ami                    = "ami-02f607855bfce66b6" # Amazon Linux 2023 AMI for ap-south-1
+  instance_type          = "t4g.medium"            # ARM64 기반 인스턴스
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
   subnet_id              = var.subnet_id
-  iam_instance_profile   = var.iam_instance_profile_name  # IAM 인스턴스 프로파일 추가
+  iam_instance_profile   = var.iam_instance_profile_name # IAM 인스턴스 프로파일 추가
 
   # 루트 볼륨 설정
   root_block_device {

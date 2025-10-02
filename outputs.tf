@@ -77,14 +77,9 @@ output "backend_bucket_name" {
 }
 
 # Workflow Hosting 출력
-output "workflow_cloudfront_url" {
-  description = "Workflow CloudFront URL"
-  value       = module.workflow_hosting.cloudfront_url
-}
-
-output "workflow_cloudfront_distribution_id" {
-  description = "Workflow CloudFront Distribution ID"
-  value       = module.workflow_hosting.cloudfront_distribution_id
+output "workflow_s3_website_url" {
+  description = "Workflow S3 Website URL"
+  value       = module.workflow_hosting.s3_website_url
 }
 
 output "workflow_s3_bucket_name" {
@@ -93,6 +88,6 @@ output "workflow_s3_bucket_name" {
 }
 
 output "workflow_iam_user_name" {
-  description = "Workflow IAM User for GitHub Actions"
+  description = "Workflow IAM User Name for GitHub Actions"
   value       = module.workflow_hosting.iam_user_name
 }

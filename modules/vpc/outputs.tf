@@ -10,7 +10,7 @@ output "vpc_cidr_block" {
 
 output "subnet_ids" {
   description = "기본 VPC의 서브넷 ID 목록"
-  value       = [
+  value = [
     aws_default_subnet.default_az_a.id,
     aws_default_subnet.default_az_b.id,
     aws_default_subnet.default_az_c.id
