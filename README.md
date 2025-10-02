@@ -1,5 +1,7 @@
 # Terraform AWS Infrastructure - Board Game App
 
+**Last Updated**: 2025-10-02
+
 Modular Terraform infrastructure for a board game application on AWS. Manages VPC, EC2, ECR, S3, SSM parameters, IAM roles, and security groups in the ap-south-1 (Mumbai) region.
 
 ## 🏗️ Architecture Overview
