@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/luxrobo/project/dev-environment-setup/scripts/**)",
+      "Bash(/Users/luxrobo/project/dev-environment-setup/scripts/install-ccpm.sh:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

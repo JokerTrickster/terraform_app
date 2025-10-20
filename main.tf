@@ -82,3 +82,12 @@ module "workflow_hosting" {
   environment  = "prod"
   project_name = "workflow"
 }
+
+# Daily Memo S3 모듈
+module "s3_daily_memo" {
+  source = "./modules/s3-daily-memo"
+
+  bucket_name  = "daily-memo-dev"
+  environment  = var.environment
+  project_name = "daily-memo"
+}
