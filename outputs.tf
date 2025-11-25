@@ -124,3 +124,24 @@ output "cloud_repository_secret_access_key" {
   value       = module.s3_cloud_repository.iam_secret_access_key
   sensitive   = true
 }
+
+# Joker Cloud Repository 출력
+output "joker_repository_bucket_name" {
+  description = "Joker Cloud Repository S3 Bucket Name"
+  value       = module.s3_joker_repository.bucket_name
+}
+
+output "joker_repository_bucket_arn" {
+  description = "Joker Cloud Repository S3 Bucket ARN"
+  value       = module.s3_joker_repository.bucket_arn
+}
+
+output "joker_repository_bucket_domain" {
+  description = "Joker Cloud Repository S3 Bucket Domain Name"
+  value       = module.s3_joker_repository.bucket_domain_name
+}
+
+output "joker_repository_bucket_regional_domain" {
+  description = "Joker Cloud Repository S3 Bucket Regional Domain Name"
+  value       = module.s3_joker_repository.bucket_regional_domain_name
+}

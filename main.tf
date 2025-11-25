@@ -99,3 +99,12 @@ module "s3_daily_memo" {
   environment  = var.environment
   project_name = "daily-memo"
 }
+
+# Joker Cloud Repository S3 모듈 - 유저 업로드용
+module "s3_joker_repository" {
+  source = "./modules/s3-joker-repository"
+
+  bucket_name  = "joker-cloud-repository"
+  environment  = var.environment
+  project_name = "joker-cloud"
+}

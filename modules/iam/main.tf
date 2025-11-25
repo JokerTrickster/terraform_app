@@ -56,7 +56,27 @@ resource "aws_iam_policy" "ec2_policy" {
           "s3:*"
         ]
         Resource = [
-          "arn:aws:s3:::board-game-app/*"
+          "arn:aws:s3:::board-game-app/*",
+          "arn:aws:s3:::board-game-app"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:GetObjectVersion",
+          "s3:PutObjectTagging",
+          "s3:GetObjectTagging",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:GetBucketCORS",
+          "s3:PutBucketCORS"
+        ]
+        Resource = [
+          "arn:aws:s3:::joker-cloud-repository-dev/*",
+          "arn:aws:s3:::joker-cloud-repository-dev"
         ]
       }
     ]
