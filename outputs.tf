@@ -91,3 +91,36 @@ output "workflow_iam_user_name" {
   description = "Workflow IAM User Name for GitHub Actions"
   value       = module.workflow_hosting.iam_user_name
 }
+
+# Cloud Repository 출력
+output "cloud_repository_bucket_name" {
+  description = "Cloud Repository S3 Bucket Name"
+  value       = module.s3_cloud_repository.bucket_name
+}
+
+output "cloud_repository_website_endpoint" {
+  description = "Cloud Repository Website Endpoint"
+  value       = module.s3_cloud_repository.website_endpoint
+}
+
+output "cloud_repository_website_url" {
+  description = "Cloud Repository Website URL"
+  value       = "http://${module.s3_cloud_repository.website_endpoint}"
+}
+
+output "cloud_repository_iam_user" {
+  description = "Cloud Repository IAM User Name for GitHub Actions"
+  value       = module.s3_cloud_repository.iam_user_name
+}
+
+output "cloud_repository_access_key_id" {
+  description = "Cloud Repository Access Key ID for GitHub Actions"
+  value       = module.s3_cloud_repository.iam_access_key_id
+  sensitive   = true
+}
+
+output "cloud_repository_secret_access_key" {
+  description = "Cloud Repository Secret Access Key for GitHub Actions"
+  value       = module.s3_cloud_repository.iam_secret_access_key
+  sensitive   = true
+}

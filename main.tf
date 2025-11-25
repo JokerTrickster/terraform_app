@@ -77,7 +77,7 @@ module "s3" {
 module "s3_cloud_repository" {
   source = "./modules/s3-cloud-repository"
 
-  bucket_name  = "joker-cloud-repository-dev"
+  bucket_name  = "cloudbox-app"
   environment  = var.environment
   project_name = var.project_name
 }
