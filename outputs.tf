@@ -145,3 +145,24 @@ output "joker_repository_bucket_regional_domain" {
   description = "Joker Cloud Repository S3 Bucket Regional Domain Name"
   value       = module.s3_joker_repository.bucket_regional_domain_name
 }
+
+# Map Editor Static Website Hosting 출력
+output "map_editor_bucket_id" {
+  description = "Map Editor S3 Bucket ID"
+  value       = module.s3_map_editor.bucket_id
+}
+
+output "map_editor_bucket_arn" {
+  description = "Map Editor S3 Bucket ARN"
+  value       = module.s3_map_editor.bucket_arn
+}
+
+output "map_editor_website_endpoint" {
+  description = "Map Editor Website Endpoint"
+  value       = module.s3_map_editor.website_endpoint
+}
+
+output "map_editor_website_url" {
+  description = "Map Editor Website URL"
+  value       = module.s3_map_editor.website_url
+}

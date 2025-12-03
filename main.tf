@@ -108,3 +108,11 @@ module "s3_joker_repository" {
   environment  = var.environment
   project_name = "joker-cloud"
 }
+
+# Map Editor Static Website Hosting 모듈
+module "s3_map_editor" {
+  source = "./modules/s3_static_website"
+
+  bucket_name = "jokertrickster-map-editor-${var.environment}"
+  environment = var.environment
+}
