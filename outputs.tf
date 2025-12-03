@@ -157,6 +157,11 @@ output "map_editor_bucket_arn" {
   value       = module.s3_map_editor.bucket_arn
 }
 
+output "map_editor_bucket_name" {
+  description = "Map Editor S3 Bucket Name"
+  value       = module.s3_map_editor.bucket_name
+}
+
 output "map_editor_website_endpoint" {
   description = "Map Editor Website Endpoint"
   value       = module.s3_map_editor.website_endpoint
@@ -165,4 +170,21 @@ output "map_editor_website_endpoint" {
 output "map_editor_website_url" {
   description = "Map Editor Website URL"
   value       = module.s3_map_editor.website_url
+}
+
+output "map_editor_iam_user_name" {
+  description = "Map Editor IAM User Name for GitHub Actions"
+  value       = module.s3_map_editor.iam_user_name
+}
+
+output "map_editor_access_key_id" {
+  description = "Map Editor Access Key ID for GitHub Actions"
+  value       = module.s3_map_editor.iam_access_key_id
+  sensitive   = true
+}
+
+output "map_editor_secret_access_key" {
+  description = "Map Editor Secret Access Key for GitHub Actions"
+  value       = module.s3_map_editor.iam_secret_access_key
+  sensitive   = true
 }

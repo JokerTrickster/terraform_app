@@ -64,3 +64,49 @@ resource "aws_s3_bucket_cors_configuration" "website" {
     max_age_seconds = 3000
   }
 }
+
+# GitHub Actions 용 IAM 사용자 생성
+resource "aws_iam_user" "github_actions" {
+  name = "${var.bucket_name}-github-actions"
+
+  tags = {
+    Name        = "${var.bucket_name}-github-actions"
+    Environment = var.environment
+    Purpose     = "GitHub Actions for S3 deployment"
+  }
+}
+
+# IAM 사용자 액세스 키
+resource "aws_iam_access_key" "github_actions" {
+  user = aws_iam_user.github_actions.name
+}
+
+# IAM 정책 - S3 버킷 접근 권한
+resource "aws_iam_user_policy" "github_actions" {
+  name = "${var.bucket_name}-github-actions-policy"
+  user = aws_iam_user.github_actions.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
+        ]
+        Resource = aws_s3_bucket.website.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:PutObjectAcl"
+        ]
+        Resource = "${aws_s3_bucket.website.arn}/*"
+      }
+    ]
+  })
+}
