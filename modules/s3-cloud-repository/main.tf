@@ -32,9 +32,9 @@ resource "aws_s3_bucket_public_access_block" "main" {
   bucket = aws_s3_bucket.main.id
 
   block_public_acls       = true
-  block_public_policy     = false  # 버킷 정책을 통한 공개 액세스 허용
+  block_public_policy     = false # 버킷 정책을 통한 공개 액세스 허용
   ignore_public_acls      = true
-  restrict_public_buckets = false  # 공개 버킷 허용
+  restrict_public_buckets = false # 공개 버킷 허용
 }
 
 # 정적 웹 사이트 호스팅 설정

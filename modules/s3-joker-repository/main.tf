@@ -34,9 +34,9 @@ resource "aws_s3_bucket_public_access_block" "main" {
   bucket = aws_s3_bucket.main.id
 
   block_public_acls       = true
-  block_public_policy     = false  # Presigned URL 정책 허용
+  block_public_policy     = false # Presigned URL 정책 허용
   ignore_public_acls      = true
-  restrict_public_buckets = false  # Presigned URL 접근 허용
+  restrict_public_buckets = false # Presigned URL 접근 허용
 }
 
 # CORS 설정 - Presigned URL 업로드를 위한 설정
@@ -46,8 +46,8 @@ resource "aws_s3_bucket_cors_configuration" "main" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET", "PUT", "POST", "HEAD", "DELETE"]
-    allowed_origins = ["*"]  # 프로덕션에서는 특정 도메인으로 제한 권장
-    expose_headers  = [
+    allowed_origins = ["*"] # 프로덕션에서는 특정 도메인으로 제한 권장
+    expose_headers = [
       "ETag",
       "x-amz-server-side-encryption",
       "x-amz-request-id",
@@ -66,7 +66,7 @@ resource "aws_s3_object" "folders" {
     "images/",
     "videos/",
     "documents/",
-    "temp/"  # 임시 업로드용
+    "temp/" # 임시 업로드용
   ])
 
   bucket = aws_s3_bucket.main.id
@@ -87,7 +87,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
     }
 
     expiration {
-      days = 7  # temp 폴더의 파일은 7일 후 자동 삭제
+      days = 7 # temp 폴더의 파일은 7일 후 자동 삭제
     }
   }
 
@@ -95,10 +95,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
     id     = "delete-old-versions"
     status = "Enabled"
 
-    filter {}  # 모든 객체에 적용
+    filter {} # 모든 객체에 적용
 
     noncurrent_version_expiration {
-      noncurrent_days = 30  # 이전 버전은 30일 후 삭제
+      noncurrent_days = 30 # 이전 버전은 30일 후 삭제
     }
   }
 
@@ -106,10 +106,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
     id     = "abort-incomplete-multipart-uploads"
     status = "Enabled"
 
-    filter {}  # 모든 객체에 적용
+    filter {} # 모든 객체에 적용
 
     abort_incomplete_multipart_upload {
-      days_after_initiation = 1  # 미완성 멀티파트 업로드는 1일 후 삭제
+      days_after_initiation = 1 # 미완성 멀티파트 업로드는 1일 후 삭제
     }
   }
 }
