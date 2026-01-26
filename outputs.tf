@@ -188,3 +188,46 @@ output "map_editor_secret_access_key" {
   value       = module.s3_map_editor.iam_secret_access_key
   sensitive   = true
 }
+
+# Psychology Test Static Website Hosting 출력
+output "psychology_test_bucket_id" {
+  description = "Psychology Test S3 Bucket ID"
+  value       = module.s3_psychology_test.bucket_id
+}
+
+output "psychology_test_bucket_arn" {
+  description = "Psychology Test S3 Bucket ARN"
+  value       = module.s3_psychology_test.bucket_arn
+}
+
+output "psychology_test_bucket_name" {
+  description = "Psychology Test S3 Bucket Name"
+  value       = module.s3_psychology_test.bucket_name
+}
+
+output "psychology_test_website_endpoint" {
+  description = "Psychology Test Website Endpoint"
+  value       = module.s3_psychology_test.website_endpoint
+}
+
+output "psychology_test_website_url" {
+  description = "Psychology Test Website URL"
+  value       = module.s3_psychology_test.website_url
+}
+
+output "psychology_test_iam_user_name" {
+  description = "Psychology Test IAM User Name for GitHub Actions"
+  value       = module.s3_psychology_test.iam_user_name
+}
+
+output "psychology_test_access_key_id" {
+  description = "Psychology Test Access Key ID for GitHub Actions"
+  value       = module.s3_psychology_test.iam_access_key_id
+  sensitive   = true
+}
+
+output "psychology_test_secret_access_key" {
+  description = "Psychology Test Secret Access Key for GitHub Actions"
+  value       = module.s3_psychology_test.iam_secret_access_key
+  sensitive   = true
+}

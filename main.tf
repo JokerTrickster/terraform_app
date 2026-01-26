@@ -37,6 +37,7 @@ module "ec2" {
   environment               = var.environment
   project_name              = var.project_name
   iam_instance_profile_name = module.iam.ec2_instance_profile_name
+  enabled                   = false # EC2 인스턴스 비활성화
 }
 
 # ECR 모듈
@@ -114,5 +115,13 @@ module "s3_map_editor" {
   source = "./modules/s3_static_website"
 
   bucket_name = "jokertrickster-map-editor-${var.environment}"
+  environment = var.environment
+}
+
+# Psychology Test Static Website Hosting 모듈
+module "s3_psychology_test" {
+  source = "./modules/s3_static_website"
+
+  bucket_name = "jokertrickster-psychology-test-${var.environment}"
   environment = var.environment
 }

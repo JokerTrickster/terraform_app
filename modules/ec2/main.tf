@@ -1,5 +1,7 @@
 # 기존 EC2 인스턴스 생성 (t4g.medium)
 resource "aws_instance" "main" {
+  count = var.enabled ? 1 : 0
+
   ami                    = "ami-02f607855bfce66b6" # Amazon Linux 2023 AMI for ap-south-1
   instance_type          = "t4g.medium"            # ARM64 기반 인스턴스
   key_name               = var.key_name
@@ -24,7 +26,9 @@ resource "aws_instance" "main" {
 
 # Elastic IP 할당
 resource "aws_eip" "main" {
-  instance = aws_instance.main.id
+  count = var.enabled ? 1 : 0
+
+  instance = aws_instance.main[0].id
   domain   = "vpc"
 
   tags = {

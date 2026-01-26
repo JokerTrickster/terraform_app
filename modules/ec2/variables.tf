@@ -37,4 +37,10 @@ variable "project_name" {
 variable "iam_instance_profile_name" {
   description = "IAM 인스턴스 프로파일 이름"
   type        = string
+}
+
+variable "enabled" {
+  description = "EC2 인스턴스 활성화 여부"
+  type        = bool
+  default     = true
 } 
