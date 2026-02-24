@@ -125,3 +125,11 @@ module "s3_psychology_test" {
   bucket_name = "jokertrickster-psychology-test-${var.environment}"
   environment = var.environment
 }
+
+# Joker Mall Static Website Hosting 모듈
+module "s3_joker_mall" {
+  source = "./modules/s3_static_website"
+
+  bucket_name = "jokertrickster-joker-mall-${var.environment}"
+  environment = var.environment
+}

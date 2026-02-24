@@ -231,3 +231,46 @@ output "psychology_test_secret_access_key" {
   value       = module.s3_psychology_test.iam_secret_access_key
   sensitive   = true
 }
+
+# Joker Mall Static Website Hosting 출력
+output "joker_mall_bucket_id" {
+  description = "Joker Mall S3 Bucket ID"
+  value       = module.s3_joker_mall.bucket_id
+}
+
+output "joker_mall_bucket_arn" {
+  description = "Joker Mall S3 Bucket ARN"
+  value       = module.s3_joker_mall.bucket_arn
+}
+
+output "joker_mall_bucket_name" {
+  description = "Joker Mall S3 Bucket Name"
+  value       = module.s3_joker_mall.bucket_name
+}
+
+output "joker_mall_website_endpoint" {
+  description = "Joker Mall Website Endpoint"
+  value       = module.s3_joker_mall.website_endpoint
+}
+
+output "joker_mall_website_url" {
+  description = "Joker Mall Website URL"
+  value       = module.s3_joker_mall.website_url
+}
+
+output "joker_mall_iam_user_name" {
+  description = "Joker Mall IAM User Name for GitHub Actions"
+  value       = module.s3_joker_mall.iam_user_name
+}
+
+output "joker_mall_access_key_id" {
+  description = "Joker Mall Access Key ID for GitHub Actions"
+  value       = module.s3_joker_mall.iam_access_key_id
+  sensitive   = true
+}
+
+output "joker_mall_secret_access_key" {
+  description = "Joker Mall Secret Access Key for GitHub Actions"
+  value       = module.s3_joker_mall.iam_secret_access_key
+  sensitive   = true
+}
