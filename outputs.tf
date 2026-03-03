@@ -274,3 +274,46 @@ output "joker_mall_secret_access_key" {
   value       = module.s3_joker_mall.iam_secret_access_key
   sensitive   = true
 }
+
+# Molandolan Static Website Hosting 출력
+output "molandolan_bucket_id" {
+  description = "Molandolan S3 Bucket ID"
+  value       = module.s3_molandolan.bucket_id
+}
+
+output "molandolan_bucket_arn" {
+  description = "Molandolan S3 Bucket ARN"
+  value       = module.s3_molandolan.bucket_arn
+}
+
+output "molandolan_bucket_name" {
+  description = "Molandolan S3 Bucket Name"
+  value       = module.s3_molandolan.bucket_name
+}
+
+output "molandolan_website_endpoint" {
+  description = "Molandolan Website Endpoint"
+  value       = module.s3_molandolan.website_endpoint
+}
+
+output "molandolan_website_url" {
+  description = "Molandolan Website URL"
+  value       = module.s3_molandolan.website_url
+}
+
+output "molandolan_iam_user_name" {
+  description = "Molandolan IAM User Name for GitHub Actions"
+  value       = module.s3_molandolan.iam_user_name
+}
+
+output "molandolan_access_key_id" {
+  description = "Molandolan Access Key ID for GitHub Actions"
+  value       = module.s3_molandolan.iam_access_key_id
+  sensitive   = true
+}
+
+output "molandolan_secret_access_key" {
+  description = "Molandolan Secret Access Key for GitHub Actions"
+  value       = module.s3_molandolan.iam_secret_access_key
+  sensitive   = true
+}

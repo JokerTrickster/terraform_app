@@ -133,3 +133,11 @@ module "s3_joker_mall" {
   bucket_name = "jokertrickster-joker-mall-${var.environment}"
   environment = var.environment
 }
+
+# Molandolan Static Website Hosting 모듈
+module "s3_molandolan" {
+  source = "./modules/s3_static_website"
+
+  bucket_name = "jokertrickster-molandolan-${var.environment}"
+  environment = var.environment
+}
