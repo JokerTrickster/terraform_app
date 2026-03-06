@@ -27,12 +27,18 @@ sudo unzip awscliv2.zip
 sudo ./aws/install
 sudo rm -rf aws awscliv2.zip
 
+# SSM에서 패스워드 가져오기
+AWS_REGION="ap-south-1"
+MYSQL_PASSWORD=$(aws ssm get-parameter --name "dev_frog_mysql_password" --with-decryption --query 'Parameter.Value' --output text --region $AWS_REGION)
+REDIS_PASSWORD=$(aws ssm get-parameter --name "dev_frog_redis_password" --with-decryption --query 'Parameter.Value' --output text --region $AWS_REGION)
+RABBITMQ_PASSWORD=$(aws ssm get-parameter --name "dev_frog_rabbitmq_password" --with-decryption --query 'Parameter.Value' --output text --region $AWS_REGION)
+
 # 프로젝트 디렉토리 생성
 sudo mkdir -p /home/ubuntu/board_game_app
 cd /home/ubuntu/board_game_app
 
 # Docker Compose 파일 생성
-sudo cat > docker-compose.yml << 'COMPOSE'
+cat > docker-compose.yml << COMPOSE
 version: '3.8'
 
 services:
@@ -44,7 +50,7 @@ services:
     environment:
       - ENV=development
       - PORT=8080
-      - DATABASE_URL=mysql://root:examplepassword@mysql:3306/dev_frog
+      - DATABASE_URL=mysql://root:${MYSQL_PASSWORD}@mysql:3306/dev_frog
       - REDIS_URL=redis://redis:6379
     depends_on:
       - mysql
@@ -58,10 +64,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: examplepassword
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: dev_frog
       MYSQL_USER: board
-      MYSQL_PASSWORD: examplepassword
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -73,7 +79,7 @@ services:
     container_name: redis
     command: >
       redis-server
-      --requirepass examplepassword
+      --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     volumes:
@@ -99,7 +105,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - grafana_data:/var/lib/grafana
     networks:
@@ -125,7 +131,7 @@ services:
       - "15672:15672"   # 관리 웹 UI 포트
     environment:
       RABBITMQ_DEFAULT_USER: board
-      RABBITMQ_DEFAULT_PASS: examplepassword
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
@@ -280,8 +286,8 @@ sudo docker-compose up -d
 
 if [ $? -eq 0 ]; then
   echo "✅ Docker Compose 서비스 시작 완료!"
-  echo "📊 Grafana: http://localhost:3000 (admin/admin)"
-  echo "🐰 RabbitMQ: http://localhost:15672 (board/examplepassword)"
+  echo "📊 Grafana: http://localhost:3000"
+  echo "🐰 RabbitMQ: http://localhost:15672"
   echo "📈 Promtail: http://localhost:9080"
   echo "📊 Loki: http://localhost:3100"
 else

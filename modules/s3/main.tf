@@ -48,6 +48,24 @@ resource "aws_s3_bucket_public_access_block" "backend" {
   restrict_public_buckets = true
 }
 
+# Terraform State Locking 용 DynamoDB 테이블
+resource "aws_dynamodb_table" "terraform_lock" {
+  name         = "terraform-state-lock"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "terraform-state-lock"
+    Environment = var.environment
+    Purpose     = "Terraform State Locking"
+  }
+}
+
 # S3 버킷 버전 관리 설정
 resource "aws_s3_bucket_versioning" "main" {
   bucket = aws_s3_bucket.main.id

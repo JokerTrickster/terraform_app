@@ -78,3 +78,21 @@ variable "dev_frog_rabbitmq_port" {
   type        = string
   default     = "5672"
 }
+
+variable "dev_frog_mysql_password" {
+  description = "MySQL password"
+  type        = string
+  sensitive   = true
+}
+
+variable "dev_frog_redis_password" {
+  description = "Redis password"
+  type        = string
+  sensitive   = true
+}
+
+variable "dev_frog_rabbitmq_password" {
+  description = "RabbitMQ password"
+  type        = string
+  sensitive   = true
+}

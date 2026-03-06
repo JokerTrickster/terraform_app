@@ -1,6 +1,6 @@
 # ECR 리포지토리 생성
 resource "aws_ecr_repository" "main" {
-  name                 = "dev_frog"
+  name                 = var.repository_name
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -8,7 +8,7 @@ resource "aws_ecr_repository" "main" {
   }
 
   tags = {
-    Name        = "dev_frog"
+    Name        = var.repository_name
     Environment = var.environment
     Project     = var.project_name
   }
@@ -49,8 +49,3 @@ resource "aws_ecr_lifecycle_policy" "main" {
     ]
   })
 }
-
-# 리전 설정
-provider "aws" {
-  region = "ap-south-1"
-} 

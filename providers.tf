@@ -9,9 +9,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "board-game-app-terraform-backend-dev"
-    key    = "terraform.tfstate"
-    region = "ap-south-1"
+    bucket         = "board-game-app-terraform-backend-dev"
+    key            = "terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "terraform-state-lock"
+    encrypt        = true
   }
 }
 

@@ -1,17 +1,10 @@
 # 보안 그룹 생성
 resource "aws_security_group" "main" {
+  count = var.enabled ? 1 : 0
+
   name        = "${var.project_name}-sg"
   description = "Security group for EC2 instance"
   vpc_id      = var.vpc_id
-
-  # 모든 포트 허용
-  ingress {
-    description = "Allow all inbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   # SSH 접속 허용
   ingress {
@@ -51,4 +44,4 @@ resource "aws_security_group" "main" {
   tags = {
     Name = "${var.project_name}-sg"
   }
-} 
+}

@@ -55,4 +55,19 @@ output "dev_frog_rabbitmq_port_arn" {
 output "dev_frog_rabbitmq_host_arn" {
   description = "Dev Frog RabbitMQ Host 파라미터 ARN"
   value       = aws_ssm_parameter.dev_frog_rabbitmq_host.arn
+}
+
+output "dev_frog_mysql_password_arn" {
+  description = "Dev Frog MySQL Password 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_mysql_password.arn
+}
+
+output "dev_frog_redis_password_arn" {
+  description = "Dev Frog Redis Password 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_redis_password.arn
+}
+
+output "dev_frog_rabbitmq_password_arn" {
+  description = "Dev Frog RabbitMQ Password 파라미터 ARN"
+  value       = aws_ssm_parameter.dev_frog_rabbitmq_password.arn
 } 

@@ -1,5 +1,7 @@
 # IAM 역할 생성
 resource "aws_iam_role" "ec2_role" {
+  count = var.enabled ? 1 : 0
+
   name = "${var.project_name}-ec2-role"
 
   assume_role_policy = jsonencode({
@@ -22,6 +24,8 @@ resource "aws_iam_role" "ec2_role" {
 
 # EC2 정책 생성
 resource "aws_iam_policy" "ec2_policy" {
+  count = var.enabled ? 1 : 0
+
   name        = "${var.project_name}-ec2-policy"
   description = "Policy for EC2 instances"
 
@@ -31,8 +35,24 @@ resource "aws_iam_policy" "ec2_policy" {
       {
         Effect = "Allow"
         Action = [
-          "ec2:*",
-          "ecr:GetAuthorizationToken",
+          "ec2:DescribeInstances",
+          "ec2:DescribeTags",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeVpcs"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
@@ -43,7 +63,13 @@ resource "aws_iam_policy" "ec2_policy" {
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
           "ecr:CompleteLayerUpload",
-          "ecr:PutImage",
+          "ecr:PutImage"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ssm:GetParameter",
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
@@ -53,7 +79,11 @@ resource "aws_iam_policy" "ec2_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:*"
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
         ]
         Resource = [
           "arn:aws:s3:::board-game-app/*",
@@ -85,17 +115,16 @@ resource "aws_iam_policy" "ec2_policy" {
 
 # 정책을 역할에 연결
 resource "aws_iam_role_policy_attachment" "ec2_policy_attachment" {
-  role       = aws_iam_role.ec2_role.name
-  policy_arn = aws_iam_policy.ec2_policy.arn
+  count = var.enabled ? 1 : 0
+
+  role       = aws_iam_role.ec2_role[0].name
+  policy_arn = aws_iam_policy.ec2_policy[0].arn
 }
 
 # 인스턴스 프로필 생성
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "${var.project_name}-ec2-profile"
-  role = aws_iam_role.ec2_role.name
-}
+  count = var.enabled ? 1 : 0
 
-# 리전 설정
-provider "aws" {
-  region = "ap-south-1"
-} 
+  name = "${var.project_name}-ec2-profile"
+  role = aws_iam_role.ec2_role[0].name
+}

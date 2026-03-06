@@ -4,18 +4,6 @@ variable "aws_region" {
   default     = "ap-south-1"
 }
 
-variable "vpc_cidr" {
-  description = "VPC CIDR 블록"
-  type        = string
-  default     = "172.31.0.0/16"
-}
-
-variable "public_subnet_cidr" {
-  description = "퍼블릭 서브넷 CIDR 블록"
-  type        = string
-  default     = "172.31.1.0/24"
-}
-
 variable "environment" {
   description = "환경 (dev, staging, prod)"
   type        = string
@@ -105,4 +93,25 @@ variable "dev_frog_rabbitmq_port" {
   description = "RabbitMQ port"
   type        = string
   default     = "5672"
+}
+
+variable "dev_frog_mysql_password" {
+  description = "MySQL password"
+  type        = string
+  sensitive   = true
+  default     = "changeme"
+}
+
+variable "dev_frog_redis_password" {
+  description = "Redis password"
+  type        = string
+  sensitive   = true
+  default     = "changeme"
+}
+
+variable "dev_frog_rabbitmq_password" {
+  description = "RabbitMQ password"
+  type        = string
+  sensitive   = true
+  default     = "changeme"
 }

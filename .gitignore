@@ -2,6 +2,8 @@ logan.cho.pem
 .terraform/
 *.tfstate
 *.tfstate.backup
+*.tfvars.local
+terraform.tfvars
 smm_tmp.tf_tmp
 logan.cho.home.pem
 # CCPM (Claude Code PM) 관련

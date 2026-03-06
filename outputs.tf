@@ -105,7 +105,7 @@ output "cloud_repository_website_endpoint" {
 
 output "cloud_repository_website_url" {
   description = "Cloud Repository Website URL"
-  value       = "http://${module.s3_cloud_repository.website_endpoint}"
+  value       = module.s3_cloud_repository.website_url
 }
 
 output "cloud_repository_iam_user" {

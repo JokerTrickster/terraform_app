@@ -59,8 +59,3 @@ data "aws_route_table" "default" {
 data "aws_availability_zones" "available" {
   state = "available"
 }
-
-# 리전 설정
-provider "aws" {
-  region = "ap-south-1"
-} 

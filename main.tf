@@ -1,17 +1,24 @@
+locals {
+  common_tags = {
+    Project     = var.project_name
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
 # VPC 모듈
 module "vpc" {
   source = "./modules/vpc"
 
-  vpc_cidr           = var.vpc_cidr
-  public_subnet_cidr = var.public_subnet_cidr
-  environment        = var.environment
-  project_name       = var.project_name
+  environment  = var.environment
+  project_name = var.project_name
 }
 
 # IAM 모듈
 module "iam" {
   source = "./modules/iam"
 
+  enabled      = false
   environment  = var.environment
   project_name = var.project_name
 }
@@ -20,6 +27,7 @@ module "iam" {
 module "security" {
   source = "./modules/security"
 
+  enabled      = false
   vpc_id       = module.vpc.vpc_id
   environment  = var.environment
   project_name = var.project_name
@@ -44,8 +52,9 @@ module "ec2" {
 module "ecr" {
   source = "./modules/ecr"
 
-  environment  = var.environment
-  project_name = var.project_name
+  repository_name = "dev_frog"
+  environment     = var.environment
+  project_name    = var.project_name
 }
 
 # SSM 모듈
@@ -61,9 +70,12 @@ module "ssm" {
   dev_common_mysql_host  = var.dev_common_mysql_host
   dev_common_mysql_port  = var.dev_common_mysql_port
   dev_frog_mysql_db      = var.dev_frog_mysql_db
-  dev_frog_rabbitmq_user = var.dev_frog_rabbitmq_user
-  dev_frog_rabbitmq_host = var.dev_frog_rabbitmq_host
-  dev_frog_rabbitmq_port = var.dev_frog_rabbitmq_port
+  dev_frog_rabbitmq_user     = var.dev_frog_rabbitmq_user
+  dev_frog_rabbitmq_host     = var.dev_frog_rabbitmq_host
+  dev_frog_rabbitmq_port     = var.dev_frog_rabbitmq_port
+  dev_frog_mysql_password    = var.dev_frog_mysql_password
+  dev_frog_redis_password    = var.dev_frog_redis_password
+  dev_frog_rabbitmq_password = var.dev_frog_rabbitmq_password
 }
 
 # S3 모듈
@@ -76,11 +88,10 @@ module "s3" {
 }
 
 module "s3_cloud_repository" {
-  source = "./modules/s3-cloud-repository"
+  source = "./modules/s3-static-website"
 
-  bucket_name  = "cloudbox-app"
-  environment  = var.environment
-  project_name = var.project_name
+  bucket_name = "cloudbox-app"
+  environment = var.environment
 }
 
 # Workflow Hosting 모듈 (S3 + CloudFront)
@@ -112,7 +123,7 @@ module "s3_joker_repository" {
 
 # Map Editor Static Website Hosting 모듈
 module "s3_map_editor" {
-  source = "./modules/s3_static_website"
+  source = "./modules/s3-static-website"
 
   bucket_name = "jokertrickster-map-editor-${var.environment}"
   environment = var.environment
@@ -120,7 +131,7 @@ module "s3_map_editor" {
 
 # Psychology Test Static Website Hosting 모듈
 module "s3_psychology_test" {
-  source = "./modules/s3_static_website"
+  source = "./modules/s3-static-website"
 
   bucket_name = "jokertrickster-psychology-test-${var.environment}"
   environment = var.environment
@@ -128,7 +139,7 @@ module "s3_psychology_test" {
 
 # Joker Mall Static Website Hosting 모듈
 module "s3_joker_mall" {
-  source = "./modules/s3_static_website"
+  source = "./modules/s3-static-website"
 
   bucket_name = "jokertrickster-joker-mall-${var.environment}"
   environment = var.environment
@@ -136,7 +147,7 @@ module "s3_joker_mall" {
 
 # Molandolan Static Website Hosting 모듈
 module "s3_molandolan" {
-  source = "./modules/s3_static_website"
+  source = "./modules/s3-static-website"
 
   bucket_name = "jokertrickster-molandolan-${var.environment}"
   environment = var.environment
